@@ -1,19 +1,22 @@
-from pymilvus import MilvusClient
-from pymilvus import model
+import os
 
+# Milvus connection settings
+MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
+MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
 
+# Milvus collection settings
+COLLECTION_NAME = "demo_collection"
+VECTOR_DIM = 768  # Default embedding function output
 
-client = MilvusClient("milvus_demo.db")
+# Index parameters
+INDEX_PARAMS = {
+    "metric_type": "COSINE",
+    "index_type": "IVF_FLAT",
+    "params": {"nlist": 128},
+}
 
-
-# Create collection
-
-if client.has_collection(collection_name="demo_collection"):
-    client.drop_collection(collection_name="demo_collection")
-client.create_collection(
-    collection_name="demo_collection",
-    dimension=768,  # The vectors we will use in this demo has 768 dimensions
-)
-
-
-
+# Search parameters
+SEARCH_PARAMS = {
+    "metric_type": "COSINE",
+    "params": {"nprobe": 10},
+}
